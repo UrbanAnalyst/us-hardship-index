@@ -107,7 +107,8 @@ hs_prop_deps <- function (state, year) {
 #' @noRd
 hs_per_capita_income <- function (state, year) {
 
-    estimate <- NULL # suppress no visible binding note
+    # suppress no visible binding notes:
+    estimate <- GEOID <- NAME <- income <- geometry <- NULL
     code <- "B19301_001"
     hs_get_one_census_data_simple (
         state = state,
