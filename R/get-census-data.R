@@ -1,5 +1,18 @@
 #' Get raw data from US census
 #'
+#' This returns the five primary variables required for the hardship index:
+#' \itemize{
+#'   \item \code{occupancy}: Proportion of rooms with > 1 occupant
+#'   \item \code{poverty}: Proportion of households below poverty
+#'   \item \code{unemployment}: Proportion of unemployed adults (between 16 and
+#'   64)
+#'   \item \code{no_hs}: Proportion of population > 25 without a highschool
+#'   diploma
+#'   \item \code{prop_deps}: Proportion of population who may be considered
+#'   dependent; that is either under 18 or over 65
+#'   \item \code{income}: Per-capita income
+#' }
+#'
 #' @param state A two-letter abbreviation for a US state (case-insensitive).
 #' @param year Year for which data are to be obtained, must be between 2009 and
 #' year prior to present.
