@@ -57,8 +57,10 @@ hs_get_occupancy <- function (state, year) {
     codes <- paste0 (code, "_", sprintf ("%03i", c (2, 5:8, 11:13)))
     code_totals <- unique (grep ("00(2|8)$", codes, value = TRUE))
 
-    hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
+    ret <- hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
         dplyr::rename (occupancy = measure)
+    cli::cli_alert_success (cli::col_green (" [1/6] Obtained occpuancy data"))
+    return (ret)
 }
 
 #'  Households below poverty
@@ -70,8 +72,10 @@ hs_get_poverty_rate <- function (state, year) {
     code <- "C17002"
     codes <- paste0 (code, "_", sprintf ("%03i", 1:3))
     code_totals <- grep ("001$", codes, value = TRUE)
-    hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
+    ret <- hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
         dplyr::rename (poverty = measure)
+    cli::cli_alert_success (cli::col_green (" [2/6] Obtained poverty data"))
+    return (ret)
 }
 
 #' Unemployment for those >= 16
@@ -86,8 +90,10 @@ hs_get_unemployment <- function (state, year) {
         sprintf ("%03i", c (2, 6:7, 11:12, 16:17, 21:22, 26))
     )
     code_totals <- paste0 (code, "_", sprintf ("%03i", c (2, 7, 12, 17, 22)))
-    hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
+    ret <- hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
         dplyr::rename (unemployment = measure)
+    cli::cli_alert_success (cli::col_green (" [3/6] Obtained employment data"))
+    return (ret)
 }
 
 #' Proportion without highschool diploma
@@ -99,8 +105,10 @@ hs_get_no_hs <- function (state, year) {
     code <- "B15003"
     codes <- paste0 (code, "_", sprintf ("%03i", 1:16))
     code_totals <- grep ("001$", codes, value = TRUE)
-    hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
+    ret <- hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
         dplyr::rename (no_hs = measure)
+    cli::cli_alert_success (cli::col_green (" [4/6] Obtained education data"))
+    return (ret)
 }
 
 #' Proportion of population < 16 & > 64
@@ -116,8 +124,10 @@ hs_prop_deps <- function (state, year) {
         sprintf ("%03i", c (1, 3:6, 20:25, 27:30, 44:49))
     )
     code_totals <- grep ("001$", codes, value = TRUE)
-    hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
+    ret <- hs_get_one_census_data (state = state, year = year, codes, code_totals) |>
         dplyr::rename (deps = measure)
+    cli::cli_alert_success (cli::col_green (" [5/6] Obtained dependents data"))
+    return (ret)
 }
 
 #' Per-capita income
@@ -128,7 +138,7 @@ hs_per_capita_income <- function (state, year) {
     # suppress no visible binding notes:
     estimate <- GEOID <- NAME <- income <- geometry <- NULL
     code <- "B19301_001"
-    hs_get_one_census_data_simple (
+    ret <- hs_get_one_census_data_simple (
         state = state,
         year = year,
         code,
@@ -136,18 +146,22 @@ hs_per_capita_income <- function (state, year) {
     ) |>
         dplyr::rename (income = estimate) |>
         dplyr::select (GEOID, NAME, income, geometry)
+    cli::cli_alert_success (cli::col_green (" [6/6] Obtained income data"))
+    return (ret)
 }
 
 hs_get_one_census_data <- function (state = "AZ", year = 2022,
                                     codes, code_totals) {
 
-    x <- tidycensus::get_acs (
-        geography = "block group",
-        variables = codes,
-        state = state,
-        geometry = FALSE,
-        year = year
-    )
+    suppressMessages ({
+        x <- tidycensus::get_acs (
+            geography = "block group",
+            variables = codes,
+            state = state,
+            geometry = FALSE,
+            year = year
+        )
+    })
 
     # Suppress no visible binding notes:
     variable <- GEOID <- NAME <- total <-
@@ -169,11 +183,13 @@ hs_get_one_census_data <- function (state = "AZ", year = 2022,
 hs_get_one_census_data_simple <- function (state = "AZ", year = 2022,
                                            code, geometry = FALSE) {
 
-    tidycensus::get_acs (
-        geography = "block group",
-        variables = code,
-        state = state,
-        geometry = geometry,
-        year = year
-    )
+    suppressMessages ({
+        tidycensus::get_acs (
+            geography = "block group",
+            variables = code,
+            state = state,
+            geometry = geometry,
+            year = year
+        )
+    })
 }
