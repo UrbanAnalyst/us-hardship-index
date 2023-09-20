@@ -30,8 +30,9 @@ status](https://github.com/UrbanAnalyst/us-hardship-index/workflows/R-CMD-check/
 # US Hardship Index
 
 `us-hardship-index` is an R package for calculating a hardship index for
-specified US states. It includes the single primary function
-`hs_hardship_index()`, which accepts the two parameters of:
+specified US states, using data from the US Census Bureau's *American Community
+Survey*. It includes the single primary function `hs_hardship_index()`, which
+accepts the two parameters of:
 
 - "state" for the desired US state; and
 - "year" for the desired year (with values available since 2010).
@@ -57,3 +58,12 @@ action is provided by [the city of Chicago](
 https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2/data),
 as a table of the six metrics plus their conversion to a composite hardship
 index.
+
+## Access to Census Bureau Data
+
+This package requires an API key for census.gov, which can be obtained from
+[the Census Bureau's website](https://api.census.gov/data/key_signup.html).
+This key should be stored as an environment variable named `CENSUS_API_KEY`,
+generally by specifying its value in the `~/.Renviron` file. Alternatively, the
+key can be set with the [`tidycensus` function,
+`census_api_key()`](https://walker-data.com/tidycensus/reference/census_api_key.html).
