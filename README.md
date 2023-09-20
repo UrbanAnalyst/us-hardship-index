@@ -37,6 +37,16 @@ Chicago](https://data.cityofchicago.org/Health-Human-Services/Census-Data-Select
 as a table of the six metrics plus their conversion to a composite
 hardship index.
 
+Note that those Chicago data are ultimately transformed into a single
+rank for each measured area, and so manifest a perfectly uniform
+distribution. In contrast, the values returned by the
+`hs_hardship_index()` function are not transformed, and so generally
+manifest highly skewed distributions. The logarithm of these values will
+nevertheless generally be approximately normally distributed.
+Accordingly, any statistical analyses of hardship values should
+generally be applied to log-transformed versions of the values derived
+here.
+
 ## Access to Census Bureau Data
 
 This package requires an API key for census.gov, which can be obtained
