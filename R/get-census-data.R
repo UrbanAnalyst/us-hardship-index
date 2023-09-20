@@ -23,6 +23,9 @@
 hs_get_census_data <- function (state = "AZ", year = 2022) {
 
     check_census_api_key ()
+    checkmate::assert_character (state, n.chars = 2L)
+    checkmate::assert_numeric (year, len = 1L)
+    if (!is.integer (year)) year <- as.integer (year)
 
     stopifnot (year >= 2009)
     this_year <- as.integer (substring (Sys.time (), 1, 4))
