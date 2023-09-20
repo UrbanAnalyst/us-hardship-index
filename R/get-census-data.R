@@ -60,6 +60,8 @@ hs_get_census_data <- function (state = "AZ", year = 2022, survey = "acs5") {
     return (res)
 }
 
+m_hs_get_census_data <- memoise::memoise (hs_get_census_data)
+
 #' Proportion of rooms with > 1 occupant
 #'
 #' @noRd
