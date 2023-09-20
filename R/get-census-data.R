@@ -16,28 +16,40 @@
 #' @param state A two-letter abbreviation for a US state (case-insensitive).
 #' @param year Year for which data are to be obtained, must be between 2009 and
 #' year prior to present.
+#' @param survey Either "acs5" (the default) for five-year aggregated values,
+#' or "acs1". Anuual availabilities differ for the different surveys. Data from
+#' both surveys are available from 2010, for "acs5" generally to two years prior
+#' to current year, and for "acs1" generally to one year prior.
 #' @return A single, \pkg{sf}-formatted `data.frame` with geometries, and
 #' columns for the five main variables.
 #' @export
 
-hs_get_census_data <- function (state = "AZ", year = 2022) {
+hs_get_census_data <- function (state = "AZ", year = 2022, survey = "acs5") {
 
+    # -------- Start Assertions
     check_census_api_key ()
     state <- check_state_code (state)
     checkmate::assert_numeric (year, len = 1L)
     if (!is.integer (year)) year <- as.integer (year)
     checkmate::assert_character (survey, len = 1L, n.chars = 4L)
+    if (!survey %in% c ("acs1", "acs5")) {
+        stop ("'survey' must be one of 'acs1' or 'acs5'", call. = FALSE)
+    }
+    if (survey == "acs1") {
+        stop ("'acs1' data are not currently supported", call. = FALSE)
+    }
 
     stopifnot (year >= 2009)
     this_year <- as.integer (substring (Sys.time (), 1, 4))
     stopifnot (year <= this_year)
+    # -------- End Assertions
 
-    occupancy <- hs_get_occupancy (state, year)
-    poverty <- hs_get_poverty_rate (state, year)
-    unemployment <- hs_get_unemployment (state, year)
-    no_hs <- hs_get_no_hs (state, year)
-    prop_deps <- hs_prop_deps (state, year)
-    income <- hs_per_capita_income (state, year)
+    occupancy <- hs_get_occupancy (state, year, survey)
+    poverty <- hs_get_poverty_rate (state, year, survey)
+    unemployment <- hs_get_unemployment (state, year, survey)
+    no_hs <- hs_get_no_hs (state, year, survey)
+    prop_deps <- hs_prop_deps (state, year, survey)
+    income <- hs_per_capita_income (state, year, survey)
 
     res <- dplyr::left_join (occupancy, poverty, by = c ("GEOID", "NAME")) |>
         dplyr::left_join (unemployment, by = c ("GEOID", "NAME")) |>
@@ -51,7 +63,7 @@ hs_get_census_data <- function (state = "AZ", year = 2022) {
 #' Proportion of rooms with > 1 occupant
 #'
 #' @noRd
-hs_get_occupancy <- function (state, year) {
+hs_get_occupancy <- function (state, year, survey) {
 
     measure <- NULL # suppress no visible binding note
     code <- "B25014"
@@ -61,8 +73,9 @@ hs_get_occupancy <- function (state, year) {
     ret <- hs_get_one_census_data (
         state = state,
         year = year,
-        codes,
-        code_totals
+        codes = codes,
+        code_totals = code_totals,
+        survey = survey
     ) |>
         dplyr::rename (occupancy = measure)
 
@@ -74,7 +87,7 @@ hs_get_occupancy <- function (state, year) {
 #'  Households below poverty
 #'
 #' @noRd
-hs_get_poverty_rate <- function (state, year) {
+hs_get_poverty_rate <- function (state, year, survey) {
 
     measure <- NULL # suppress no visible binding note
     code <- "C17002"
@@ -84,8 +97,9 @@ hs_get_poverty_rate <- function (state, year) {
     ret <- hs_get_one_census_data (
         state = state,
         year = year,
-        codes,
-        code_totals
+        codes = codes,
+        code_totals = code_totals,
+        survey = survey
     ) |>
         dplyr::rename (poverty = measure)
 
@@ -97,7 +111,7 @@ hs_get_poverty_rate <- function (state, year) {
 #' Unemployment for those >= 16
 #'
 #' @noRd
-hs_get_unemployment <- function (state, year) {
+hs_get_unemployment <- function (state, year, survey) {
 
     measure <- NULL # suppress no visible binding note
     code <- "B23027"
@@ -110,8 +124,9 @@ hs_get_unemployment <- function (state, year) {
     ret <- hs_get_one_census_data (
         state = state,
         year = year,
-        codes,
-        code_totals
+        codes = codes,
+        code_totals = code_totals,
+        survey = survey
     ) |>
         dplyr::rename (unemployment = measure)
 
@@ -123,7 +138,7 @@ hs_get_unemployment <- function (state, year) {
 #' Proportion without highschool diploma
 #'
 #' @noRd
-hs_get_no_hs <- function (state, year) {
+hs_get_no_hs <- function (state, year, survey) {
 
     measure <- NULL # suppress no visible binding note
     code <- "B15003"
@@ -133,8 +148,9 @@ hs_get_no_hs <- function (state, year) {
     ret <- hs_get_one_census_data (
         state = state,
         year = year,
-        codes,
-        code_totals
+        codes = codes,
+        code_totals = code_totals,
+        survey = survey
     ) |>
         dplyr::rename (no_hs = measure)
 
@@ -147,7 +163,7 @@ hs_get_no_hs <- function (state, year) {
 #'
 #' Actually includes 15-17 bracket
 #' @noRd
-hs_prop_deps <- function (state, year) {
+hs_prop_deps <- function (state, year, survey) {
 
     measure <- NULL # suppress no visible binding note
     code <- "B01001"
@@ -160,8 +176,9 @@ hs_prop_deps <- function (state, year) {
     ret <- hs_get_one_census_data (
         state = state,
         year = year,
-        codes,
-        code_totals
+        codes = codes,
+        code_totals = code_totals,
+        survey = survey
     ) |>
         dplyr::rename (deps = measure)
 
@@ -173,7 +190,7 @@ hs_prop_deps <- function (state, year) {
 #' Per-capita income
 #'
 #' @noRd
-hs_per_capita_income <- function (state, year) {
+hs_per_capita_income <- function (state, year, survey) {
 
     # suppress no visible binding notes:
     estimate <- GEOID <- NAME <- income <- geometry <- NULL
@@ -182,7 +199,8 @@ hs_per_capita_income <- function (state, year) {
         state = state,
         year = year,
         code,
-        geometry = TRUE
+        geometry = TRUE,
+        survey = survey
     ) |>
         dplyr::rename (income = estimate) |>
         dplyr::select (GEOID, NAME, income, geometry)
@@ -193,7 +211,7 @@ hs_per_capita_income <- function (state, year) {
 }
 
 hs_get_one_census_data <- function (state = "AZ", year = 2022,
-                                    codes, code_totals) {
+                                    codes, code_totals, survey) {
 
     suppressMessages ({
         x <- tidycensus::get_acs (
@@ -202,7 +220,7 @@ hs_get_one_census_data <- function (state = "AZ", year = 2022,
             state = state,
             geometry = FALSE,
             year = year,
-            survey = "acs1"
+            survey = survey
         )
     })
 
@@ -224,7 +242,7 @@ hs_get_one_census_data <- function (state = "AZ", year = 2022,
 }
 
 hs_get_one_census_data_simple <- function (state = "AZ", year = 2022,
-                                           code, geometry = FALSE) {
+                                           code, geometry = FALSE, survey) {
 
     suppressMessages ({
         tidycensus::get_acs (
@@ -232,7 +250,8 @@ hs_get_one_census_data_simple <- function (state = "AZ", year = 2022,
             variables = code,
             state = state,
             geometry = geometry,
-            year = year
+            year = year,
+            survey = survey
         )
     })
 }

@@ -4,13 +4,18 @@
 \alias{hs_get_census_data}
 \title{Get raw data from US census}
 \usage{
-hs_get_census_data(state = "AZ", year = 2022)
+hs_get_census_data(state = "AZ", year = 2022, survey = "acs5")
 }
 \arguments{
 \item{state}{A two-letter abbreviation for a US state (case-insensitive).}
 
 \item{year}{Year for which data are to be obtained, must be between 2009 and
 year prior to present.}
+
+\item{survey}{Either "acs5" (the default) for five-year aggregated values,
+or "acs1". Anuual availabilities differ for the different surveys. Data from
+both surveys are available from 2010, for "acs5" generally to two years prior
+to current year, and for "acs1" generally to one year prior.}
 }
 \value{
 A single, \pkg{sf}-formatted \code{data.frame} with geometries, and
