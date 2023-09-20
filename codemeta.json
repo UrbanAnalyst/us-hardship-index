@@ -7,7 +7,7 @@
   "codeRepository": "https://github.com/UrbanAnalyst/us-hardship-index",
   "issueTracker": "https://github.com/UrbanAnalyst/us-hardship-index/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.1.018",
+  "version": "0.0.1.019",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -93,5 +93,7 @@
     },
     "SystemRequirements": {}
   },
-  "fileSize": "17.381KB"
+  "fileSize": "19.322KB",
+  "contIntegration": "https://github.com/UrbanAnalyst/us-hardship-index/actions?query=workflow%3AR-CMD-check",
+  "developmentStatus": "https://www.repostatus.org/#active"
 }

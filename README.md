@@ -1,0 +1,37 @@
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+[![R build
+status](https://github.com/UrbanAnalyst/us-hardship-index/workflows/R-CMD-check/badge.svg)](https://github.com/UrbanAnalyst/us-hardship-index/actions?query=workflow%3AR-CMD-check)
+[![Project Status:
+Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
+# US Hardship Index
+
+`us-hardship-index` is an R package for calculating a hardship index for
+specified US states. It includes the single primary function
+`hs_hardship_index()`, which accepts the two parameters of:
+
+- “state” for the desired US state; and
+- “year” for the desired year (with values available since 2010).
+
+The index itself is calculated from the methodology of “*An Update on
+Urban Hardship*,” by Lisa M. Monteil, Richard P. Nathan, and David J.
+Wright (2004), *The Nelson A. Rockefeller Institute of Goverment*. It is
+formed as a multiple of the following six measures, each standardised to
+unit (or percentage) scales:
+
+- *occupancy*: Proportion of rooms with \> 1 occupant per room;
+- *poverty*: Proportion of households below poverty line;
+- *unemployment*: Proportion of unemployed adults;
+- *no_hs*: Proportion of population without highschool diploma
+- *deps*: Proportion of population who may be considered dependent; that
+  is either under 18 or over 65
+- *income*: Per-capita income
+
+All variables are quantified such that lower values are better, except
+for income. The hardship index is then simply the product of those six
+metrics, again standardised to a unit (or percentage) scale. An example
+of the index in action is provided by [the city of
+Chicago](https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2/data),
+as a table of the six metrics plus their conversion to a composite
+hardship index.
