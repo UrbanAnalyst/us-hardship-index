@@ -18,5 +18,23 @@ both surveys are available from 2010, for "acs5" generally to two years prior
 to current year, and for "acs1" generally to one year prior.}
 }
 \description{
-Use raw census data to calculate compound hardship index
+The index is calculated following the methodology of "An Update on Urban
+Hardship," by Lisa M. Monteil, Richard P. Nathan, and David J. Wright (2004),
+The Nelson A. Rockefeller Institute of Goverment. It is formed as a multiple
+of the following six measures, each standardised to unit (or percentage)
+scales:
+}
+\details{
+\itemize{
+\item \code{occupancy}: Proportion of rooms with > 1 occupant per room;
+\item \code{poverty}: Proportion of households below poverty line;
+\item \code{unemployment}: Proportion of unemployed adults;
+\item \code{no_hs}: Proportion of population without highschool diploma
+\item \code{deps}:  Proportion of population who may be considered
+dependent; that is either under 18 or over 65
+\item \code{income}: Per-capita income
+}
+
+All variables are quantified such that lower values are better, except for
+income.
 }

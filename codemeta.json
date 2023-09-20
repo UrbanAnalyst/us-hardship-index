@@ -2,12 +2,12 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "ushardship",
-  "description": "Hardship Index from United States Census Data",
+  "description": "Derives a Hardship Index from United States census data.",
   "name": "ushardship: Hardship Index from United States Census Data",
   "codeRepository": "https://github.com/UrbanAnalyst/us-hardship-index",
   "issueTracker": "https://github.com/UrbanAnalyst/us-hardship-index/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.1.016",
+  "version": "0.0.1.17",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -31,7 +31,67 @@
     }
   ],
   "softwareRequirements": {
-    "SystemRequirements": {}
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "checkmate",
+      "name": "checkmate",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=checkmate"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "cli",
+      "name": "cli",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cli"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "memoise",
+      "name": "memoise",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=memoise"
+    },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "tidycensus",
+      "name": "tidycensus",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidycensus"
+    },
+    "SystemRequirements": null
   },
-  "fileSize": "1.396KB"
+  "fileSize": "17.381KB"
 }
