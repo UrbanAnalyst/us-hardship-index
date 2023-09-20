@@ -2,3 +2,4 @@
 
 export(hs_get_census_data)
 export(hs_hardship_index)
+importFrom(memoise,memoise)
