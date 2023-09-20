@@ -1,6 +1,6 @@
 check_state_code <- function (state) {
 
-    checkmate::assert_character (state, n.chars = 2L)
+    checkmate::assert_character (state, len = 1L, n.chars = 2L)
     state <- toupper (state)
 
     codes <- data.frame (rbind (
