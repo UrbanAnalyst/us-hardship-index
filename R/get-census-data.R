@@ -22,6 +22,8 @@
 
 hs_get_census_data <- function (state = "AZ", year = 2022) {
 
+    check_census_api_key ()
+
     stopifnot (year >= 2009)
     this_year <- as.integer (substring (Sys.time (), 1, 4))
     stopifnot (year <= this_year)
