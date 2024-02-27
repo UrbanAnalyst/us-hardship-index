@@ -2,8 +2,8 @@
 % Please edit documentation in R/ushardship-package.R
 \docType{package}
 \name{ushardship-package}
+\alias{ushardship}
 \alias{ushardship-package}
-\alias{_PACKAGE}
 \title{ushardship: Hardship Index from United States Census Data}
 \description{
 Derives a Hardship Index from United States census data.
