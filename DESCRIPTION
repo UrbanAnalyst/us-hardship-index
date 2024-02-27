@@ -1,6 +1,6 @@
 Package: ushardship
 Title: Hardship Index from United States Census Data
-Version: 0.0.1.023
+Version: 0.0.1.024
 Authors@R: 
     person(given = "Mark",
            family = "Padgham",
@@ -14,7 +14,9 @@ Imports:
     checkmate,
     cli,
     dplyr,
+    geodist,
     memoise,
+    sf,
     tidycensus
 Encoding: UTF-8
 LazyData: true
