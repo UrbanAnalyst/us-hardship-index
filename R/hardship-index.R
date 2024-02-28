@@ -38,18 +38,24 @@ hs_hardship_index <- function (state = "AZ", year = 2022, survey = "acs5") {
     }
 
     # Then impute any missing values:
-    xy_cent <- sf::st_as_sf (dat) |>
-        sf::st_transform (crs = 4326) |>
-        sf::st_centroid () |>
-        sf::st_coordinates ()
+    suppressWarnings (
+        xy_cent <- sf::st_as_sf (dat) |>
+            sf::st_transform (crs = 4326) |>
+            sf::st_centroid () |>
+            sf::st_coordinates ()
+    )
 
     index <- which (!is.na (xy_cent [, 1]) & !is.na (xy_cent [, 2]))
     xy_cent <- xy_cent [index, ]
     dat <- dat [index, ]
 
     # replace any NA values with weighted neighbour values:
+    cli::cli_alert_info (cli::col_yellow ("Imputing missing values ..."))
+    pb <- utils::txtProgressBar ()
+    count <- 1
     for (v in vars) {
-        message (v)
+        utils::setTxtProgressBar (pb, count / length (vars))
+        count <- count + 1
         index_NA <- which (is.na (dat [[v]]))
         index <- which (!is.na (dat [[v]]))
         dmin <- geodist::geodist (xy_cent [index_NA, ], xy_cent [index, ], measure = "haversine")
@@ -59,6 +65,8 @@ hs_hardship_index <- function (state = "AZ", year = 2022, survey = "acs5") {
         dat_wt <- array (dat [[v]] [index], dim = t (dim (dmin)))
         dat [[v]] [index_NA] <- rowSums (d_wts * dat_wt, na.rm = TRUE)
     }
+    close (pb)
+    cli::cli_alert_success (cli::col_yellow ("Imputed missing values"))
 
     dat_mat <- as.matrix (dat [, vars])
     dat$hardship <- apply (dat_mat, 1, prod)
