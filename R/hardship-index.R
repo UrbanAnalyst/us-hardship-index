@@ -50,7 +50,12 @@ hs_hardship_index <- function (state = "AZ", year = 2022, survey = "acs5") {
     dat <- dat [index, ]
 
     # Cast to polygons:
-    dat$geometry <- sf::st_cast (dat$geometry, "POLYGON")
+    dat <- sf::st_as_sf (dat)
+    dat <- sf::st_cast (dat, "POLYGON")
+    index <- which (duplicated (dat$GEOID))
+    if (length (index) > 0L) {
+        dat <- dat [-index, ]
+    }
 
     # replace any NA values with weighted neighbour values:
     cli::cli_alert_info (cli::col_yellow ("Imputing missing values ..."))
