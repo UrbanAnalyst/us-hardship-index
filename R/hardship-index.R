@@ -49,6 +49,9 @@ hs_hardship_index <- function (state = "AZ", year = 2022, survey = "acs5") {
     xy_cent <- xy_cent [index, ]
     dat <- dat [index, ]
 
+    # Cast to polygons:
+    dat$geometry <- sf::st_cast (dat$geometry, "POLYGON")
+
     # replace any NA values with weighted neighbour values:
     cli::cli_alert_info (cli::col_yellow ("Imputing missing values ..."))
     pb <- utils::txtProgressBar ()
