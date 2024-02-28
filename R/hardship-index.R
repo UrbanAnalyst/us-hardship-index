@@ -76,7 +76,7 @@ hs_hardship_index <- function (state = "AZ", year = 2022, survey = "acs5") {
     close (pb)
     cli::cli_alert_success (cli::col_yellow ("Imputed missing values"))
 
-    dat_mat <- as.matrix (dat [, vars])
+    dat_mat <- as.matrix (sf::st_drop_geometry (dat [, vars]))
     dat$hardship <- apply (dat_mat, 1, prod)
     dat$hardship <- dat$hardship / max (dat$hardship, na.rm = TRUE)
 

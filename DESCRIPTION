@@ -1,6 +1,6 @@
 Package: ushardship
 Title: Hardship Index from United States Census Data
-Version: 0.0.1.028
+Version: 0.0.1.029
 Authors@R: 
     person(given = "Mark",
            family = "Padgham",
